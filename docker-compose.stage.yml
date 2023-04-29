@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  nginx:
+    image: ridez/websocket:nginx-api-stage
+    ports:
+      - '80:80'
+  api:
+    environment:
+      - PORT=${PORT}
+    env_file:
+      - .env
+    image: ridez/websocket:api-stage
+    ports:
+      - '3001:3001'
+    container_name: api
