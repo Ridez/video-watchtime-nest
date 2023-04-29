@@ -8,4 +8,7 @@ export class Watchtime extends PrimaryEntity {
 
   @Column()
   watchtime!: number;
+
+  @Column()
+  videoId!: string;
 }

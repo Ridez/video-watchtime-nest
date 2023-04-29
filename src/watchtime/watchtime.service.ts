@@ -11,9 +11,21 @@ export class WatchtimeService {
     private readonly watchtimeRepository: Repository<Watchtime>,
   ) {}
 
-  create(createWatchtimeDto: CreateWatchtimeDto) {
-    const { watchtime } = createWatchtimeDto;
+  async create(createWatchtimeDto: CreateWatchtimeDto) {
+    const { videoId, watchtime } = createWatchtimeDto;
 
-    return this.watchtimeRepository.save({ watchtime: Math.round(watchtime) });
+    const existingWatchtime = await this.watchtimeRepository.findOne({
+      where: { videoId },
+    });
+
+    if (existingWatchtime) {
+      existingWatchtime.watchtime += Math.round(createWatchtimeDto.watchtime);
+      return this.watchtimeRepository.save(existingWatchtime);
+    } else {
+      return this.watchtimeRepository.save({
+        watchtime: Math.round(watchtime),
+        videoId,
+      });
+    }
   }
 }
